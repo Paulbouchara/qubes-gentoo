@@ -1,21 +1,25 @@
 # Maintainer: Frédéric Pierret <frederic.pierret@qubes-os.org>
 
-EAPI=7
+EAPI=8
 
 PYTHON_COMPAT=( python3_{10..13} )
 
 inherit git-r3 multilib distutils-r1 qubes
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_COMMIT=HEAD
+if [[ ${PV} == 9999 ]]; then
+	EGIT_BRANCH="main"
+	EGIT_COMMIT="main"
+elif [[ ${PV} == 4.3.9999 ]]; then
+	EGIT_BRANCH="release4.3"
+	EGIT_COMMIT="release4.3"
 else
 	EGIT_COMMIT="v${PV}"
 fi
 
-EGIT_REPO_URI="https://github.com/QubesOS/qubes-core-qubesdb.git"
+EGIT_REPO_URI="https://github.com/QubesOS/qubes-linux-utils.git"
 
 KEYWORDS="amd64"
-DESCRIPTION="QubesDB libs and daemon service"
+DESCRIPTION="Common Linux files for Qubes VM"
 HOMEPAGE="http://www.qubes-os.org"
 LICENSE="GPL-2"
 
@@ -23,6 +27,11 @@ SLOT="0"
 IUSE=""
 
 DEPEND="app-emulation/qubes-libvchan-xen
+        media-gfx/imagemagick
+        dev-libs/icu
+        dev-python/pycairo[${PYTHON_USEDEP}]
+        dev-python/pillow[${PYTHON_USEDEP}]
+        dev-python/numpy[${PYTHON_USEDEP}]
         ${PYTHON_DEPS}
         "
 RDEPEND="${DEPEND}"
@@ -34,23 +43,10 @@ src_prepare() {
 }
 
 src_compile() {
-    myopt="${myopt} DESTDIR=${D} SYSTEMD=1 BACKEND_VMM=xen"
+    myopt="${myopt} DESTDIR="${D}" BACKEND_VMM=xen LIBDIR=/usr/$(get_libdir)"
     emake ${myopt} all
 }
 
 src_install() {
     emake ${myopt} install
-
-    dodir /usr/lib/systemd/system/
-    insopts -m 0644
-    insinto /usr/lib/systemd/system/
-    doins daemon/qubes-db.service
-}
-
-pkg_postinst() {
-    systemctl enable qubes-db.service
-}
-
-pkg_postrm() {
-    systemctl disable qubes-db.service
 }

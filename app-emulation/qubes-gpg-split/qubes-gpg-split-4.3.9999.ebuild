@@ -1,13 +1,17 @@
 # Maintainer: Frédéric Pierret <frederic.pierret@qubes-os.org>
 
-EAPI=7
+EAPI=8
 
 PYTHON_COMPAT=( python3_{10..13} )
 
 inherit git-r3 multilib distutils-r1 qubes
 
-if [[ ${PV} == *9999 ]]; then
-	EGIT_COMMIT=HEAD
+if [[ ${PV} == 9999 ]]; then
+	EGIT_BRANCH="main"
+	EGIT_COMMIT="main"
+elif [[ ${PV} == 4.3.9999 ]]; then
+	EGIT_BRANCH="release4.3"
+	EGIT_COMMIT="release4.3"
 else
 	EGIT_COMMIT="v${PV}"
 fi
