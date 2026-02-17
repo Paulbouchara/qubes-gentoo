@@ -1,4 +1,4 @@
-# Maintainer: Frédéric Pierret <frederic.pierret@qubes-os.org>
+# Maintainer: Frederic Pierret <frederic.pierret@qubes-os.org>
 
 EAPI=8
 
