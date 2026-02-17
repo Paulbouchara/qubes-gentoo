@@ -4,6 +4,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{10..13} )
 
+DISTUTILS_USE_PEP517=no
 inherit git-r3 multilib distutils-r1 qubes
 
 if [[ ${PV} == 9999 ]]; then
