@@ -1,0 +1,26 @@
+--- a/libqrexec/libqrexec-utils.h
++++ b/libqrexec/libqrexec-utils.h
+@@ -23,8 +23,12 @@
+ #ifndef LIBQREXEC_UTILS_H
+ #define LIBQREXEC_UTILS_H
+ 
++#ifndef _POSIX_C_SOURCE
+ #define _POSIX_C_SOURCE 200809L
++#endif
++#ifndef _GNU_SOURCE
+ #define _GNU_SOURCE 1
++#endif
+ #include <signal.h>
+ #include <stdbool.h>
+ #include <libvchan.h>
+--- a/libqrexec/exec.c
++++ b/libqrexec/exec.c
+@@ -597,7 +597,7 @@
+ 
+         /* Parse service name ("qubes.Service") */
+ 
+-        char *const plus = memchr(start, '+', descriptor_len);
++        const char *plus = memchr(start, '+', descriptor_len);
+         size_t const name_len = plus != NULL ? (size_t)(plus - start) : descriptor_len;
+         if (name_len > NAME_MAX) {
+             LOG(ERROR, "Service name too long to execute (length %zu)", name_len);

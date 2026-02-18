@@ -43,13 +43,13 @@ DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]
 RDEPEND="${DEPEND}"
 PDEPEND=""
 
+PATCHES=(
+    "${FILESDIR}/${PN}-4.3.11-fix-build.patch"
+)
+
 src_prepare() {
     qubes_verify_sources_git "${EGIT_COMMIT}"
     default
-
-    # Fix redefinition error of _POSIX_C_SOURCE and _GNU_SOURCE
-    sed -i 's/^#define _POSIX_C_SOURCE 200809L/#ifndef _POSIX_C_SOURCE\n#define _POSIX_C_SOURCE 200809L\n#endif/' libqrexec/libqrexec-utils.h
-    sed -i 's/^#define _GNU_SOURCE 1/#ifndef _GNU_SOURCE\n#define _GNU_SOURCE 1\n#endif/' libqrexec/libqrexec-utils.h
 }
 
 src_compile() {
